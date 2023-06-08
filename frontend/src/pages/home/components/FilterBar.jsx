@@ -13,7 +13,7 @@ import FilterNameModal from './FilterNameModal';
 
 export default function FilterBar({ data, filter, setFilter, onReset }) {
   const [value, setValue] = useState({ 
-    startDate: new Date(), 
+    startDate: null, 
     endDate: new Date().setMonth(11) 
   }); 
   const [authorsList, setAuthorsList] = useState([])
@@ -34,7 +34,6 @@ export default function FilterBar({ data, filter, setFilter, onReset }) {
 
   useEffect(() => {
     let customFilters = localStorage.getItem('filters');
-    console.log('debug: data', JSON.parse(customFilters))
     if(customFilters) {
       setCustomFilterList(JSON.parse(customFilters).map(v => {
         return {
@@ -50,7 +49,6 @@ export default function FilterBar({ data, filter, setFilter, onReset }) {
   const fetchSourcesAvailableList = useCallback(async () => {
     try {
       const result = await newsAPIClient({url: '/sources', method: 'GET',  params: { apiKey: process.env.REACT_APP_NEWS_API_KEY}})
-      console.log('debug: result', result);
       if(result.status === 200) {
         setSourcesList(result.data.sources.map(v => {
           return {
@@ -126,8 +124,6 @@ export default function FilterBar({ data, filter, setFilter, onReset }) {
   }
 
   const valueForSource = _.find(sourceList, v=> v.value === filter['sources'])
-
-  console.log('debug: filter', filter);
 
   return (
     <div className='grid md:grid-cols-4 gap-x-4 gap-y-4 md:gap-y-0'>

@@ -4,17 +4,24 @@ import {
   TabsHeader,
   TabsBody,
   Tab,
-  TabPanel,
-  Input,
-  Button,
 } from "@material-tailwind/react";
-import clsx from "clsx";
-import NewsCard from "./NewsCard";
 import NewsDetailModal from "./NewsDetailModal";
-import { FilterIcon } from "components/Icons";
-import FilterBar from "./FilterBar";
+import NewsAPITab from "./NewsAPITab";
+import NewYorkTimesTab from "./NewYorkTimesTab";
+import TheGuardianTab from "./TheGuardianTab";
  
-export default function APITabs({apiCategory, setAPICategory, onSearch, searchKey, setSearchKey, showingList, setFilter, filter}) {
+export default function APITabs({
+  apiCategory, 
+  setAPICategory, 
+  onSearch, 
+  searchKey, 
+  setSearchKey, 
+  showingList, 
+  setFilter, 
+  filter,
+  articles,
+  guardians
+}) {
   const [showDetail, setShowDetail] = useState(false);
   const [selectedData, setSelectedData] = useState(null)
   const [showFilter, setShowFilter] = useState(false);
@@ -37,43 +44,56 @@ export default function APITabs({apiCategory, setAPICategory, onSearch, searchKe
         <Tab key='NewYorkTimes' onClick={() => setAPICategory('NewYorkTimes')} value='NewYorkTimes'>
           New York Times
         </Tab>
+        <Tab key='TheGuardian' onClick={() => setAPICategory('TheGuardian')} value='TheGuardian'>
+          The Guardians
+        </Tab>
       </TabsHeader>
       <TabsBody className="min-h-[80vh]">
-        <TabPanel key='NewsAPI' value='NewsAPI'>
-          <div className="space-y-3">
-            <div className="max-w-xl mx-auto space-y-3">
-              <p className="text-xs">To search articles or news with keyword, please type keyword first then click submit button or press enter key.</p>
-              <div className="md:flex items-center md:space-x-2 space-y-4">
-                <Input label="Search Key" value={searchKey} onChange={(e) => setSearchKey(e.target.value)}/>
-                <div className="flex space-x-2">
-                  <Button className="flex justify-center" disabled={searchKey.length === 0} onClick={onSearch}>Search</Button>
-                  <div 
-                    className={clsx("p-3 rounded-md cursor-pointer", showFilter && 'bg-blue-500')} 
-                    onClick={() => setShowFilter(prev => !prev)}
-                  >
-                    <FilterIcon className={clsx(showFilter ? 'text-white' : 'text-gray-700')} size={25}/>
-                  </div>
-                </div>
-                
-              </div>
-            </div>
-            {showFilter && (
-              <div className="max-w-7xl mx-auto pb-4">
-                <FilterBar filter={filter} setFilter={setFilter} data={showingList} onReset={onReset}/>
-              </div>
-            )}
-            {showingList.length === 0 && (
-              <h5 className="text-center text-3xl text-gray-500 pt-10">No news</h5>
-            )}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-10">
-              {showingList.map(v => (
-                <NewsCard data={v} viewData={viewDetail}/>
-              ))}
-            </div>
-          </div>
-        </TabPanel>
+        {apiCategory === 'NewsAPI' && (
+          <NewsAPITab 
+            key="NewsAPI"
+            value="NewsAPI"
+            setShowFilter={setShowFilter}
+            showFilter={showFilter}
+            searchKey={searchKey}
+            onSearch={onSearch}
+            showingList={showingList}
+            onReset={onReset}
+            setSearchKey={setSearchKey}
+            filter={filter}
+            setFilter={setFilter}
+            viewDetail={viewDetail}
+          />
+        )}
+        {apiCategory === 'NewYorkTimes' && (
+          <NewYorkTimesTab 
+            key="NewYorkTimes"
+            value="NewYorkTimes"
+            searchKey={searchKey} 
+            setSearchKey={setSearchKey} 
+            onSearch={onSearch}
+            showingList={articles}
+            viewDetail={viewDetail}
+          />
+        )}
+        {apiCategory === 'TheGuardian' && (
+          <TheGuardianTab
+            key="TheGuardian"
+            value="TheGuardian"
+            searchKey={searchKey} 
+            setSearchKey={setSearchKey} 
+            onSearch={onSearch}
+            showingList={guardians}
+            viewDetail={viewDetail}
+          />
+        )}
       </TabsBody>
-      <NewsDetailModal open={showDetail} closeModal={() => setShowDetail(false)} data={selectedData}/>
+      <NewsDetailModal 
+        open={showDetail} 
+        closeModal={() => setShowDetail(false)} 
+        data={selectedData}
+        apiCategory={apiCategory}
+      />
     </Tabs>
   )
 }

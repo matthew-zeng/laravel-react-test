@@ -18,7 +18,6 @@ export default function Setting() {
   const checkUserLogin = useCallback(async () => {
     if(!user) {
       const resultAction = await dispatch(fetchUser());
-      console.log(fetchUser)
       if (!fetchUser.fulfilled.match(resultAction)) {
         navigate('/')
       }

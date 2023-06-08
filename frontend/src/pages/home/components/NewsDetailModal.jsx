@@ -8,8 +8,6 @@ export default function NewsDetailModal({
   data
 }) {
   if(!data) return null;
-
-  console.log('debug: data', data)
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-20" onClose={closeModal}>
@@ -67,13 +65,6 @@ export default function NewsDetailModal({
                 </div>
 
                 <div className="mt-[20px]">
-                  {/* <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={closeModal}
-                  >
-                    Got it, thanks!
-                  </button> */}
                   <Button onClick={closeModal} className='mt-5 w-full'>Close</Button>
                 </div>
               </Dialog.Panel>

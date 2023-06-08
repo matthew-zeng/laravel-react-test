@@ -38,7 +38,6 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
-      console.log('debug: here')
       state.user = action.payload
     })
     builder.addCase(logout.fulfilled, (state, _) => {
